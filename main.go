@@ -9,7 +9,12 @@ import (
 	"github.com/elevenfofiv/crytocurrency/blockchain"
 )
 
-const port string = ":4000"
+const (
+	port        string = ":4000"
+	templateDir string = "templates/"
+)
+
+var templates *template.Template
 
 type homeData struct {
 	PageTitle string
@@ -17,12 +22,13 @@ type homeData struct {
 }
 
 func home(rw http.ResponseWriter, r *http.Request) {
-	tmp1 := template.Must(template.ParseFiles("templates/home.gohtml"))
 	data := homeData{"Home", blockchain.GetBlockchain().AllBlocks()}
-	tmp1.Execute(rw, data)
+	templates.ExecuteTemplate(rw, "home", data)
 }
 
 func main() {
+	templates = template.Must(template.ParseGlob(templateDir + "pages/*.gohtml"))
+	templates = template.Must(templates.ParseGlob(templateDir + "partials/*.gohtml"))
 	http.HandleFunc("/", home)
 	fmt.Printf("Listening on http://localhost%s\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
