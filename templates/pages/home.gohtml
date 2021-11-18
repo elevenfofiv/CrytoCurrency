@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{template "head"}}
+    <body>
+        
+        {{range .Blocks}}
+            <section>
+                <ul>
+                    <li>{{.Data}}</li>
+                    <li>{{.Hash}}</li>
+                    {{if .PrevHash}}
+                        <li>{{.PrevHash}}</li>
+                    {{end}}
+                </ul>
+            </section>
+        {{end}}
+        </main>
+    </body>
+</html>
